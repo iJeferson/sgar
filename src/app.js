@@ -9,17 +9,25 @@ const app = express()
 // Body
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
-app.use(express.static('public'));
-
+app.use(express.static('public'))
 
 // Sessão
 app.use(
   session({
-    secret: 'adminlte_secret',
+    secret: process.env.SESSION_SECRET || 'adminlte_secret',
     resave: false,
     saveUninitialized: false
   })
 )
+
+app.engine(
+  'handlebars',
+  exphbs.engine({
+    defaultLayout: 'main',
+    partialsDir: path.join(__dirname, '../views/partials')
+  })
+)
+
 
 // Handlebars
 app.engine(
@@ -30,26 +38,26 @@ app.engine(
 )
 app.set('view engine', 'handlebars')
 
-// AdminLTE (node_modules)
+// AdminLTE
 app.use(
   '/adminlte',
-  express.static(
-    path.join(__dirname, '../node_modules/admin-lte/dist')
-  )
+  express.static(path.join(__dirname, '../node_modules/admin-lte/dist'))
 )
 
 app.use(
   '/adminlte/plugins',
-  express.static(
-    path.join(__dirname, '../node_modules/admin-lte/plugins')
-  )
+  express.static(path.join(__dirname, '../node_modules/admin-lte/plugins'))
 )
 
-// Rota de teste
-app.get('/login', (req, res) => {
-  res.render('auth/login', { layout: false })
-})
+// Rotas 
+const authRoutes = require('./routes/auth.routes')
+app.use('/', authRoutes)
 
+// Dashboard
+const dashboardRoutes = require('./routes/dashboard.routes')
+app.use('/', dashboardRoutes)
+
+// Server
 app.listen(3000, () => {
   console.log('Servidor rodando em http://localhost:3000/login')
 })

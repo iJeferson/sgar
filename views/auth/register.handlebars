@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/images/sgar-favicon.png">
+
+  <title>Registro | SGAR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <link rel="stylesheet" href="/adminlte/css/adminlte.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+
+  <style>
+    .is-invalid { border-color: #dc3545 !important; }
+    .invalid-feedback { display: none; color: #dc3545; font-size: 0.875em; }
+    .is-invalid + .invalid-feedback { display: block; }
+  </style>
+</head>
+
+<body class="bg-light">
+
+<div class="container min-vh-100 d-flex align-items-center justify-content-center">
+  <div class="card shadow-lg border-0" style="width: 100%; max-width: 420px;">
+    <div class="card-body p-4">
+
+      <div class="text-center mb-4">
+        <img src="/images/sgar-logo.png" alt="SGAR" style="max-width: 180px;" class="mb-2"/>
+      </div>
+
+      <form id="registerForm" action="/register" method="POST" novalidate>
+        <div class="mb-3">
+          <label class="form-label">Nome Completo</label>
+          <input type="text" name="name" class="form-control form-control-lg" placeholder="Seu nome completo" required />
+          <div class="invalid-feedback">O nome é obrigatório.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-control form-control-lg" placeholder="seu@email.com" required />
+          <div class="invalid-feedback">Por favor, insira um email válido.</div>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label">Senha</label>
+          <input type="password" name="password" class="form-control form-control-lg" placeholder="••••••••" required />
+          <div class="invalid-feedback">A senha é obrigatória.</div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Confirme a Senha</label>
+          <input type="password" name="confirmPassword" class="form-control form-control-lg" placeholder="••••••••" required />
+          <div class="invalid-feedback">As senhas devem coincidir.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100">Criar conta</button>
+      </form>
+
+      <div class="text-center mt-4">
+        <span class="text-muted small">Já tem conta?</span>
+        <a href="/login" class="fw-semibold text-decoration-none">Entrar</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  const registerForm = document.getElementById('registerForm');
+  registerForm.addEventListener('submit', function(e){
+    const name = registerForm.name.value.trim();
+    const email = registerForm.email.value.trim();
+    const password = registerForm.password.value.trim();
+    const confirm = registerForm.confirmPassword.value.trim();
+    let valid = true;
+
+    if(!name){ registerForm.name.classList.add('is-invalid'); valid=false; } else registerForm.name.classList.remove('is-invalid');
+    if(!email || !/\S+@\S+\.\S+/.test(email)){ registerForm.email.classList.add('is-invalid'); valid=false; } else registerForm.email.classList.remove('is-invalid');
+    if(!password){ registerForm.password.classList.add('is-invalid'); valid=false; } else registerForm.password.classList.remove('is-invalid');
+    if(password !== confirm){ registerForm.confirmPassword.classList.add('is-invalid'); valid=false; } else registerForm.confirmPassword.classList.remove('is-invalid');
+
+    if(!valid) e.preventDefault();
+  });
+</script>
+
+</body>
+</html>
